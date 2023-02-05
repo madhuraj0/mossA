@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install CPIO and python
+      run: |
+        sudo apt install cpio
+        pip3 install twrpdtgen
+        wget  https://files.catbox.moe/k2kktd.img
+        python3 -m twrpdtgen k2kkd.img
+        git add .
+    - name: Push new files to GitHub
+      run: |
+        git config --global user.email "indiamadhuraj@gmail.com"
+        git config --global user.name "madhuraj0"
+        git commit -m "build commit"
+        git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/${{ github.repository }}.git main --force
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        PAT: ${{ secrets.PAT }}
