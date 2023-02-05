@@ -15,6 +15,7 @@ jobs:
         python-version: '3.10'
     - name: Install CPIO and python
       run: |
+        sudo apt update
         sudo apt install cpio
         pip3 install twrpdtgen
         git clone https://github.com/twrpdtgen/twrpdtgen.git
