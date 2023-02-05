@@ -2,6 +2,7 @@ name: Build
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -9,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout code
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -21,6 +22,7 @@ jobs:
         wget  https://files.catbox.moe/k2kktd.img
         python3 -m twrpdtgen k2kkd.img
         git add .
+        
     - name: Push new files to GitHub
       run: |
         git config --global user.email "indiamadhuraj@gmail.com"
