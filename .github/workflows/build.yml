@@ -19,7 +19,7 @@ jobs:
         sudo apt install cpio
         pip3 install twrpdtgen
         git clone https://github.com/twrpdtgen/twrpdtgen.git
-        wget 'https://s3.ap-south-1.amazonaws.com/blob-ap-south-1-ukyez4/sara/f8/f8eb/f8eb294b-40b9-42c0-982e-0d42003f838c.bin?response-content-disposition=attachment%3B%20filename%3D%22vendor_boot.img%22&response-content-type=&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4DM2EY46SOWUMUP4%2F20230205%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230205T190340Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1800&X-Amz-Signature=35f64afd00be49588ea77f624410b60c0893824e84e3a39a50ae0332df3f10c3'
+        wget https://gitlab.com/madhuraj0/rmx3392twrp/-/raw/main/vendor_boot.img
         ls
         python3 -m twrpdtgen vendor_boot.img
         git add .
