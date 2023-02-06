@@ -18,9 +18,9 @@ jobs:
         sudo apt install cpio
         pip3 install twrpdtgen
         git clone https://github.com/twrpdtgen/twrpdtgen.git
-        wget https://gitlab.com/madhuraj0/rmx3392twrp/-/raw/main/vendor_boot.img
+        wget https://gitlab.com/madhuraj0/rmx3392twrp/-/raw/main/boot.img
         ls
-        python3 -m twrpdtgen vendor_boot.img
+        python3 -m twrpdtgen boot.img
         git add .
         
     - name: Push new files to GitHub
