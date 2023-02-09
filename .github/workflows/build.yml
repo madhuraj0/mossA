@@ -12,18 +12,19 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    - name: Install CPIO and python
+    - name: Download resources
       run: |
         sudo apt update
         sudo apt-get upgrade
         git clone https://github.com/sebaubuntu-python/dumpyara.git
-        wget https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
-        ls
-        python3 -m dumpyara c31025c3a26445a6810d295fa01cca67.zip
+        pip3 install dumpyara
         git clone https://github.com/sebaubuntu-python/aospdtgen.git
+        curl -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
+        ls
+        python3 -m dumpyara ota.zip
         python3 -m -o /aospdt aospdtgen /
         ls
-        rm -f c31025c3a26445a6810d295fa01cca67.zip
+        rm -f ota.zip
         cd aospdt
         git add .
         
