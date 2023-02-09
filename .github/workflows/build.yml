@@ -25,13 +25,17 @@ jobs:
         ls
         pip install .
         python3 -m aospdtgen -h
-        curl -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
+        curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
         ls
         python3 -m dumpyara ota.zip
-        python3 -m aospdtgen working/ota
         ls
         rm -f ota.zip
+        cd working/ota
+        ls
+        python3 -m aospdtgen /
+        ls
         cd aospdt
+        ls
         git add .
         
     - name: Push new files to GitHub
