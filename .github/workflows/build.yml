@@ -17,10 +17,9 @@ jobs:
         sudo apt update
         sudo apt-get upgrade
         git clone https://github.com/sebaubuntu-python/dumpyara.git
-        cd dumpyara
+        cd dumpyara/dumpyara
         ls
-        pip install -r requirements.txt
-        pip3 install dumpyara
+        pip3 install .
         git clone https://github.com/sebaubuntu-python/aospdtgen.git
         cd aospdtgen
         pip install -r requirements.txt
