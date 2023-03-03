@@ -1,20 +1,22 @@
-steps:
-- name: Build
-  command: |
-    sudo apt update
-    sudo apt-get upgrade
-    git clone https://github.com/sebaubuntu-python/dumpyara.git
-    cd dumpyara
-    pip3 install .
-    git clone https://github.com/sebaubuntu-python/aospdtgen.git
-    cd aospdtgen
-    pip install .
-    curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
-    python3 -m dumpyara ota.zip
-    rm -f ota.zip
-    cd working/ota
-    python3 -m aospdtgen /
-  artifacts:
-    - type: paths
-      paths:
-        - working/ota/aospdt/
+tasks:
+  build:
+    commands:
+      - sudo apt update
+      - sudo apt-get upgrade
+      - git clone https://github.com/sebaubuntu-python/dumpyara.git
+      - cd dumpyara
+      - pip3 install .
+      - git clone https://github.com/sebaubuntu-python/aospdtgen.git
+      - cd aospdtgen
+      - pip install .
+      - curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
+      - python3 -m dumpyara ota.zip
+      - rm -f ota.zip
+      - cd working/ota
+      - python3 -m aospdtgen /
+    artifacts:
+      - type: paths
+        paths:
+          - working/ota/aospdt/
+    when:
+      branch: main
