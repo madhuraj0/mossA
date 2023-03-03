@@ -1,6 +1,6 @@
-tasks:
-  build:
-    script:
+steps:
+- name: Build
+  command: |
     sudo apt update
     sudo apt-get upgrade
     git clone https://github.com/sebaubuntu-python/dumpyara.git
@@ -18,5 +18,3 @@ tasks:
     - type: paths
       paths:
         - working/ota/aospdt/
-  when:
-    branch: main
