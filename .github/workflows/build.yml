@@ -25,7 +25,7 @@ jobs:
         ls
         pip install .
         python3 -m aospdtgen -h
-        curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
+        curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
         ls
         python3 -m dumpyara ota.zip
         ls
