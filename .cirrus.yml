@@ -1,24 +1,54 @@
-tasks:
+global:
+  build_environment:
+    # Set the desired build environment variables here, if any
+  artifacts:
+    # Define any artifacts you want to upload or save here, if any
+
+jobs:
   build:
+    # Define your build job here
+    machine_type: n1-standard-16
     steps:
-      - name: Build
-        command: |
-          sudo apt update
-          sudo apt-get upgrade
-          git clone https://github.com/sebaubuntu-python/dumpyara.git
-          cd dumpyara
-          pip3 install .
-          git clone https://github.com/sebaubuntu-python/aospdtgen.git
-          cd aospdtgen
-          pip install .
-          curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-8c0f8b26e3321a05060a6b2ab2d632ea/component-ota/22/10/19/c31025c3a26445a6810d295fa01cca67.zip
-          python3 -m dumpyara ota.zip
-          rm -f ota.zip
-          cd working/ota
-          python3 -m aospdtgen /
-        artifacts:
-          - type: paths
-            paths:
-              - working/ota/aospdt/
-        when:
-          branch: main
+      - checkout
+      - run:
+          name: Download stock OTA package
+          command: |
+            curl -O https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
+      - run:
+          name: Extract OTA package
+          command: |
+            git clone https://github.com/SebaUbuntu/dumpyara.git
+            cd dumpyara
+            python3 dumpyara.py ../cd9825cd6f6044fd8ae7a90ba3d96097.zip
+            cd ..
+      - run:
+          name: Install aospdtgen
+          command: |
+            git clone https://github.com/sebaubuntu/aospdtgen.git
+            cd aospdtgen
+            sudo apt-get install python3-pip
+            sudo pip3 install -r requirements.txt
+      - run:
+          name: Generate device tree
+          command: |
+            cd aospdtgen
+            python3 aospdtgen.py -d ../dumpyara -o /path/to/output/dir
+      - save_cache:
+          key: dtree_cache
+          paths:
+            - /path/to/output/dir
+      - run:
+          name: Upload device tree
+          command: |
+            cirrus-upload -p /path/to/output/dir/ -P /dtree/
+      - run:
+          name: Build with lunch
+          command: |
+            source build/envsetup.sh
+            lunch aosp_device-userdebug
+            m -j16
+
+workflows:
+  main:
+    jobs:
+      - build
