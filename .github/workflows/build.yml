@@ -29,9 +29,9 @@ jobs:
         python3 -m dumpyara ota.zip
         ls
         rm -f ota.zip
-        cd working/ota
+        cd working
         ls
-        python3 -m aospdtgen /
+        python3 -m aospdtgen ..
         ls
         cd aospdt
         ls
