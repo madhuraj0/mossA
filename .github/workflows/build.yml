@@ -14,8 +14,6 @@ jobs:
         python-version: '3.10'
     - name: Download resources
       run: |
-        sudo apt update
-        sudo apt-get upgrade
         git clone https://github.com/sebaubuntu-python/dumpyara.git
         cd dumpyara
         ls
