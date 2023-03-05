@@ -22,10 +22,9 @@ jobs:
         cd ..
         curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
         unzip ota.zip
-        cd ota
-        mv payload.bin ../payload-dumper
+        mv payload.bin /payload-dumper
         ls
-        cd ../payload-dumper
+        cd payload-dumper
         ls
         pip3 install -r requirements.txt
         python payload_dumper.py payload.bin
