@@ -20,6 +20,8 @@ jobs:
         ls
         pip install .
         cd ..
+        cd ..
+        ls
         cd payload-dumper
         curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
         unzip ota.zip
