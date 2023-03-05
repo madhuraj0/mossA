@@ -1,0 +1,47 @@
+name: payload method 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Download resources
+      run: |
+        git clone https://github.com/vm03/payload_dumper.git
+        git clone https://github.com/sebaubuntu-python/aospdtgen.git
+        cd aospdtgen
+        ls
+        pip install .
+        cd ..
+        curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
+        unzip ota.zip
+        cd ota
+        mv payload.bin ../payload-dumper
+        ls
+        cd ../payload-dumper
+        ls
+        pip3 install -r requirements.txt
+        python payload_dumper.py payload.bin
+        ls
+        python3 -m aospdtgen /
+        ls
+        cd aospdt
+        ls
+        git add .
+        
+    - name: Push new files to GitHub
+      run: |
+        git config --global user.email "indiamadhuraj@gmail.com"
+        git config --global user.name "madhuraj0"
+        git commit -m "build commit"
+        git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/${{ github.repository }}.git main --force
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        PAT: ${{ secrets.PAT }}
