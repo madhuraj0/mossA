@@ -13,22 +13,27 @@ jobs:
       with:
         python-version: '3.10'
     - name: Download resources
-      run: |
-        git clone https://github.com/vm03/payload_dumper.git
+      run: | 
+        sudo apt -y install git golang liblzma-dev
+        git clone https://github.com/ssut/payload-dumper-go.git
+        cd payload-dumper-go
+        go build .
+        cd ..
         git clone https://github.com/sebaubuntu-python/aospdtgen.git
         cd aospdtgen
         ls
         pip install .
         cd ..
         ls
-        cd payload_dumper
+        cd payload-dumper-go
         curl -s -o ota.zip https://gauss-componentotacostmanual-in.allawnofs.com/remove-bac9975bd5e38a78207550d5f9780da7/component-ota/23/02/21/cd9825cd6f6044fd8ae7a90ba3d96097.zip
         unzip ota.zip
         ls
-        pip3 install -r requirements.txt
-        python payload_dumper.py payload.bin
+        payload-dumper-go payload.bin
         ls
-        python3 -m aospdtgen /
+        cd ..
+        cd aospdtgen
+        python3 -m aospdtgen ../payload-dumper-go/
         ls
         cd aospdt
         ls
