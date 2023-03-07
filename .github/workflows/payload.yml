@@ -21,7 +21,7 @@ jobs:
         cd android_tools
         chmod +x setup.sh
         sudo bash setup.sh
-        pip install protobuf=3.20.1
+        pip install protobuf==3.20.1
         ./tools/rom_extract.sh ../ota.zip
         ./tools/dummy_dt.sh /dumps/ota/
         cd dummy_dt
