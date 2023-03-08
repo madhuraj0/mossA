@@ -1,0 +1,55 @@
+name: Build Lineage Recovery
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-recovery:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        android-version: ['11']
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Download recovery source code
+      run: |
+        git clone https://github.com/LineageOS/android_bootable_recovery.git -b lineage-20.0
+
+    - name: Download device tree
+      run: |
+        git clone https://github.com/madhuraj0/device_oplus_RE879EL1.git device/oplus/RE879EL1
+      
+    - name: Configure recovery source code
+      run: |
+        cd android_bootable_recovery
+        source build/envsetup.sh
+        lunch lineage_RE879EL1-userdebug
+        make clean
+        make -j$(nproc --all) bootimage
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          This is a custom build of Lineage Recovery for the $DEVICE device.
+        draft: false
+        prerelease: false
+
+    - name: Upload Recovery Image
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: android_bootable_recovery/out/target/product/$DEVICE/recovery.img
+        asset_name: recovery-$DEVICE.img
+        asset_content_type: application/octet-stream
