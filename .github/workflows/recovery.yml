@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        android-version: ['11']
+        android-version: ['12']
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -22,10 +22,17 @@ jobs:
     - name: Download device tree
       run: |
         git clone https://github.com/madhuraj0/device_oplus_RE879EL1.git device/oplus/RE879EL1
-      
+    - name: Initialize LineageOS source
+      run: |
+        repo init -u git://github.com/LineageOS/android.git -b lineage-20.0 --depth=1
+        repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+    - name: Copy device tree to LineageOS source
+      run: |
+        cp -r device/* device/.[^.]* lineage-20.0/device/
     - name: Configure recovery source code
       run: |
-        cd android_bootable_recovery
+        cd lineage-20.0
         source build/envsetup.sh
         lunch lineage_RE879EL1-userdebug
         make clean
