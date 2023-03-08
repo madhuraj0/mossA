@@ -24,6 +24,10 @@ jobs:
         git clone https://github.com/madhuraj0/device_oplus_RE879EL1.git device/oplus/RE879EL1
     - name: Initialize LineageOS source
       run: |
+        mkdir ~/bin
+        PATH=~/bin:$PATH
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
         repo init -u git://github.com/LineageOS/android.git -b lineage-20.0 --depth=1
         repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
