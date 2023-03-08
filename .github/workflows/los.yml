@@ -1,0 +1,54 @@
+name: Build LineageOS Boot Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip python3-setuptools
+          pip3 install virtualenv
+          virtualenv -p python3 ~/venv
+          source ~/venv/bin/activate
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          export PATH=~/bin:$PATH
+
+      - name: Download device tree
+        run: |
+          git clone https://github.com/madhuraj0/device_oplus_RE879EL1.git device/oplus/RE879EL1
+
+      - name: Initialize LineageOS source
+        run: |
+          repo init -u git://github.com/LineageOS/android.git -b lineage-20.0 --depth=1
+          repo sync -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+      - name: Copy device tree to LineageOS source
+        run: |
+          cp -r device/* device/.[^.]* lineage-20.0/device/
+
+      - name: Build LineageOS Boot Image
+        run: |
+          cd lineage-20.0
+          source build/envsetup.sh
+          lunch lineage_RE879EL1-userdebug
+          m bootimage
+
+      - name: Publish release with boot image
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            lineage-20.0/out/target/product/RE879EL1/boot.img
+          tag_name: ${{ github.sha }}
+          name: LineageOS Boot Image - ${{ github.sha }}
+          body: |
+            LineageOS Boot Image built from ${{ github.event.inputs.device_tree_repo }}
