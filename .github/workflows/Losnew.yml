@@ -24,9 +24,9 @@ jobs:
 
     - name: Install Repo
       run: |
-        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-        chmod a+x ~/bin/repo
-        export PATH=~/bin:$PATH
+        curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
+        chmod a+x /usr/local/bin/repo
+        export PATH=/usr/local/bin:$PATH
 
     - name: Initialize Build Environment
       run: |
