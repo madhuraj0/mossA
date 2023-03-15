@@ -1,0 +1,44 @@
+name: Build LineageOS Recovery
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush schedtool squashfs-tools xsltproc zip zlib1g-dev
+
+      - name: Clone device tree
+        run: git clone https://github.com/madhuraj0/device_oplus_RE879EL1.git device/oplus/RE879EL1
+
+      - name: Clone LineageOS source
+        uses: actions/checkout@v2
+        with:
+          repository: LineageOS/android
+          ref: lineage-20.0
+
+      - name: Set up environment
+        run: |
+          source build/envsetup.sh
+          lunch lineage_RE879EL1-userdebug
+
+      - name: Build recovery image
+        run: make bootimage
+
+      - name: Publish release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.ref }}/assets{?name,label}
+          asset_path: out/target/product/RE879EL1/boot.img
+          asset_name: lineage-20.0-RE879EL1-boot.img
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
