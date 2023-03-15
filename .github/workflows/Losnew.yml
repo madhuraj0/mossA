@@ -31,7 +31,7 @@ jobs:
     - name: Initialize Build Environment
       run: |
         cd ${{ github.workspace }}
-        repo init -u git://github.com/LineageOS/android.git -b ${{ github.event.inputs.branch }}
+        repo init -u https://github.com/LineageOS/android.git -b ${{ github.event.inputs.branch }}
         repo sync -j$(nproc --all)
 
     - name: Set up environment variables
